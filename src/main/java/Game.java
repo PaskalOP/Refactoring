@@ -18,19 +18,23 @@ public class Game {
     }
 
     private void getUserData(){
-        while (true) {
-            input = scan.nextByte();
-            if (input > 0 && input < 10) {
-                if (box[input - 1] == 'X' || box[input - 1] == 'O')
-                    System.out.println("That one is already in use. Enter another.");
-                else {
-                    box[input - 1] = 'X';
-                    break;
+        checkEmptySpase();
+        if(boxAvailable && winner==0){
+            while (true) {
+                input = scan.nextByte();
+                if (input > 0 && input < 10) {
+                    if (box[input - 1] == 'X' || box[input - 1] == 'O')
+                        System.out.println("That one is already in use. Enter another.");
+                    else {
+                        box[input - 1] = 'X';
+                        break;
+                    }
                 }
+                else
+                    System.out.println("Invalid input. Enter again.");
             }
-            else
-                System.out.println("Invalid input. Enter again.");
         }
+
     }
     private void printBox(){
         System.out.println("\n " + box[0] + " | " + box[1] + " | " + box[2] + " ");
@@ -58,6 +62,9 @@ public class Game {
             case 3:
                 System.out.println("It's a draw!\nCreated by Shreyas Saha. Thanks for playing!");
                 break;
+            default:
+                break;
+
         }
     }
 
@@ -72,52 +79,62 @@ public class Game {
     }
 
     private void doComputerStep(){
-        while (true) {
-            rand = (byte) (Math.random() * (9 - 1 + 1) + 1);
-            if (box[rand - 1] != 'X' && box[rand - 1] != 'O') {
-                box[rand - 1] = 'O';
-                break;
+        checkEmptySpase();
+        if(boxAvailable==true && winner==0){
+            while (true) {
+                rand = (byte) (Math.random() * (9 - 1 + 1) + 1);
+                if (box[rand - 1] != 'X' && box[rand - 1] != 'O') {
+                    box[rand - 1] = 'O';
+                    break;
+                }
             }
         }
+
     }
-    private boolean checkWinner(char charOfStep){
+    private boolean horisontalMatch(char charOfStep){
         if ((box[0]== box[1]&& box[1]==box[2]&& box[2]==charOfStep)
                 ||(box[3]== box[4]&& box[4]==box[5] &&box[5]==charOfStep)
-        ||(box[6]== box[7]&& box[7]==box[8] &&box[8]==charOfStep)
-        ||(box[0]== box[3]&& box[3]==box[6]&&box[6]==charOfStep)
-        ||(box[1]== box[4]&& box[4]==box[7]&&box[7]==charOfStep)
-        ||(box[2]== box[5]&& box[5]==box[8]&&box[8]==charOfStep)
-        ||(box[0]== box[4]&& box[4]==box[8]&&box[8]==charOfStep)
-        ||(box[2]== box[4]&& box[4]==box[6]&&box[6]==charOfStep)) return true;
+                ||(box[6]== box[7]&& box[7]==box[8] &&box[8]==charOfStep))return true;
+        else return false;
+    }
+    private boolean verticalMatch(char charOfStep){
+        if((box[0]== box[3]&& box[3]==box[6]&&box[6]==charOfStep)
+                ||(box[1]== box[4]&& box[4]==box[7]&&box[7]==charOfStep)
+                ||(box[2]== box[5]&& box[5]==box[8]&&box[8]==charOfStep)) return true;
+        else return false;
+    }
+    private boolean checkWinner(char charOfStep){
+        if(horisontalMatch(charOfStep)||verticalMatch(charOfStep)
+                ||(box[0]== box[4]&& box[4]==box[8]&&box[8]==charOfStep)
+                ||(box[2]== box[4]&& box[4]==box[6]&&box[6]==charOfStep)) return true;
        else return false;
     }
+
 
     public void goPlay(){
         printBox();
         doEmptyBox();
-        while (true){
-
-            if(winner==0 ){
-                checkEmptySpase();
-                if(boxAvailable){
-                    getUserData();
-                    if(checkWinner('X')) winner=1;
+        while (true) {
+            getUserData();
+            if(checkWinner('X')) {
+                    winner=1;
+                    printBox();
                     defineWinner();
-                }
-                checkEmptySpase();
-                if(boxAvailable){
-                    doComputerStep();
-                    if(checkWinner('O')) winner=2;
-                    defineWinner();
-                }
-
-                printBox();
-                if (!boxAvailable) {
-                    winner=3;
-                    defineWinner();
+                    break;
+            }else {
+                doComputerStep();
+                if(checkWinner('O')){
+                            winner=2;
+                            printBox();
+                            defineWinner();
+                            break;
                 }
             }
-            if(winner!=0){
+            printBox();
+            if (!boxAvailable) {
+                winner=3;
+                printBox();
+                defineWinner();
                 break;
             }
         }
