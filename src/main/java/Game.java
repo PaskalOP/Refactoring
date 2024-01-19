@@ -17,7 +17,7 @@ public class Game {
         System.out.println("Enter box number to select. Enjoy!\n");
     }
 
-    public void getUserData(){
+    private void getUserData(){
         while (true) {
             input = scan.nextByte();
             if (input > 0 && input < 10) {
@@ -32,21 +32,21 @@ public class Game {
                 System.out.println("Invalid input. Enter again.");
         }
     }
-    public void printBox(){
+    private void printBox(){
         System.out.println("\n " + box[0] + " | " + box[1] + " | " + box[2] + " ");
         System.out.println("-----------");
         System.out.println(" " + box[3] + " | " + box[4] + " | " + box[5] + " ");
         System.out.println("-----------");
         System.out.println(" " + box[6] + " | " + box[7] + " | " + box[8] + " \n");
     }
-    public void doEmptyBox(){
+    private void doEmptyBox(){
         if(!boxEmpty){
             for(int i = 0; i < 9; i++)
                 box[i] = ' ';
             boxEmpty = true;
         }
     }
-    public void defineWinner(){
+    private void defineWinner(){
 
         switch (winner){
             case 1:
@@ -61,17 +61,17 @@ public class Game {
         }
     }
 
-    public void checkEmptySpase(){
-        //boxAvailable = false;
+    private void checkEmptySpase(){
         for(int i=0; i<9; i++){
             if(box[i] != 'X' && box[i] != 'O'){
                 boxAvailable = true;
                 break;
             }
+            else boxAvailable = false;
         }
     }
 
-    public void doComputerStep(){
+    private void doComputerStep(){
         while (true) {
             rand = (byte) (Math.random() * (9 - 1 + 1) + 1);
             if (box[rand - 1] != 'X' && box[rand - 1] != 'O') {
@@ -80,7 +80,7 @@ public class Game {
             }
         }
     }
-    public boolean checkWinner(char charOfStep){
+    private boolean checkWinner(char charOfStep){
         if ((box[0]== box[1]&& box[1]==box[2]&& box[2]==charOfStep)
                 ||(box[3]== box[4]&& box[4]==box[5] &&box[5]==charOfStep)
         ||(box[6]== box[7]&& box[7]==box[8] &&box[8]==charOfStep)
