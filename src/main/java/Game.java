@@ -1,16 +1,15 @@
 import java.util.Scanner;
 
 public class Game {
-   private Scanner scan;
+   public static Scanner scan = new Scanner(System.in);
     private byte input;
     private byte rand;
     private boolean boxAvailable;
    private int winner;
-    private char box[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    public static char box[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private boolean boxEmpty;
 
     public Game(){
-        scan = new Scanner(System.in);
         boxEmpty = false;
         winner = 0;
         boxAvailable = false;
